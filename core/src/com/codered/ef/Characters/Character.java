@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.codered.ef.States.InGame;
 import com.codered.ef.Utils;
 
-public abstract class Character extends Thread{
+public abstract class Character{//} extends Thread{
 
     private static OrthographicCamera camera;
 
@@ -62,22 +62,10 @@ public abstract class Character extends Thread{
 
 
     // TODO: vector2
-    public void move(Vector3 unprojectedMouse){
-        this.sprite.translate((unprojectedMouse.x+(Gdx.graphics.getWidth()/2)-this.sprite.getX())/250,
-                              (unprojectedMouse.y+(Gdx.graphics.getHeight()/2)-this.sprite.getY())/250);
-
+    public void move(){
+        Vector3 unprojectedMouse = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        this.sprite.translate((unprojectedMouse.x+(Gdx.graphics.getWidth()/2)-this.sprite.getX())/25,
+                              (unprojectedMouse.y+(Gdx.graphics.getHeight()/2)-this.sprite.getY())/25);
     }
 
-
-    @Override
-    public void run(){
-        Vector3 unprojectedMouse; unprojectedMouse = camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
-        while(true){
-            if(sprite.getX() != unprojectedMouse.x && sprite.getY() == unprojectedMouse.y) {
-                InGame.getCharacter().move(unprojectedMouse);
-            } else break;
-
-        }
-        InGame.getCharacter().interrupt();
-    }
 }

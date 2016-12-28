@@ -2,13 +2,14 @@ package com.codered.ef.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.codered.ef.Characters.Character;
 import com.codered.ef.Characters.Olympians.Gunslinger;
 import com.codered.ef.ThreadMonitor;
 
 public class InGame extends State{
-
     private static Character character = new Gunslinger();
 
     public InGame(GameStateManager gsm) {
@@ -16,17 +17,9 @@ public class InGame extends State{
     }
 
     @Override
-    public void handleInput(){
-
-    }
-
-    @Override
-    public synchronized void update() {
-
+    public void update() {
             if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                if(!character.getState().equals(Thread.State.RUNNABLE)) {
-                     character.start();
-                }
+                character.move();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
                 character.qAbility();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
