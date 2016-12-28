@@ -9,11 +9,6 @@ public class Menu extends State{
     }
 
     @Override
-    public void handleInput() {
-
-    }
-
-    @Override
     public void update() {
 
     }
