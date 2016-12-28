@@ -2,12 +2,9 @@ package com.codered.ef.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.codered.ef.Characters.Character;
 import com.codered.ef.Characters.Olympians.Gunslinger;
-import com.codered.ef.ThreadMonitor;
 
 public class InGame extends State{
     private static Character character = new Gunslinger();
@@ -29,8 +26,8 @@ public class InGame extends State{
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
                 character.rAbility();
             }
-    }
 
+    }
 
     @Override
     public void render(SpriteBatch sb) {
@@ -41,7 +38,7 @@ public class InGame extends State{
         return character;
     }
 
-    public void setCharacter(Character c){
-        this.character = c;
+    public static void setCharacter(Character c){
+        character = c;
     }
 }
