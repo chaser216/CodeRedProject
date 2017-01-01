@@ -6,21 +6,29 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Interpolation;
+import com.codered.ef.Utils;
 
-public abstract class Character{//} extends Thread{
+public abstract class Character{// extends Thread{
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
 
     private static OrthographicCamera camera;
 
-    public static String name;
-    public int basicDamage;
-    public int magicDamage;
-    public int magicResistance;
-    public int basicResistance;
-    public int lifeStealPercentage;
-    public Type type;
-    public AttackType attack;
-    public boolean cooldownCheck = false;
-    public Texture texture;
+    private String name;
+    private int basicDamage;
+    private int magicDamage;
+    private int magicResistance;
+    private int basicResistance;
+    private int lifeStealPercentage;
+    private boolean cooldownCheck = false;
+    private Texture texture;
     public Sprite sprite;
 
     public Character(String name,
@@ -29,8 +37,6 @@ public abstract class Character{//} extends Thread{
                      int magicDamage,
                      int magicResistance,
                      int lifeStealPercentage,
-                     Type type,
-                     AttackType attack,
                      Texture texture){
 
 
@@ -39,13 +45,11 @@ public abstract class Character{//} extends Thread{
         this.basicResistance = basicResistance;
         this.magicDamage = magicDamage;
         this.magicResistance = magicResistance;
-        this.type = type;
         this.lifeStealPercentage = lifeStealPercentage;
-        this.attack = attack;
         this.texture = texture;
         this.sprite = new Sprite(texture);
         this.sprite.setOriginCenter();
-        this.sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        this.sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/4);
         camera =  new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
@@ -54,27 +58,29 @@ public abstract class Character{//} extends Thread{
     public abstract void wAbility();
     public abstract void eAbility();
     public abstract void rAbility();
-    public abstract boolean isOnCooldown();
-    public abstract  void setOnCooldown(boolean cooldown);
 
-    public void move(){
+    public void move(float mouseX,float mouseY){
+        Vector3 unprojected = camera.unproject(new Vector3(mouseX, mouseY , 0));
+        //TODO RTS-like movement/
+        sprite.setPosition(
+                Utils.lerp(sprite.getX(), unprojected.x+Gdx.graphics.getWidth()/2-sprite.getWidth()/2, 0.05f),
+                Utils.lerp(sprite.getY(), unprojected.y+Gdx.graphics.getHeight()/2-sprite.getHeight()/2, 0.05f)
+
+        );
+    }
+
+    public void projectionPrint(){
         Vector3 unprojectedMouse = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         Vector3 unprojectedSprite = camera.unproject(new Vector3(this.sprite.getX(), this.sprite.getY(), 0));
         Vector3 projectedMouse = camera.project(new Vector3(Gdx.input.getX(),Gdx.input.getY(), 0));
         Vector3 projectedSprite = camera.project(new Vector3(this.sprite.getX(), this.sprite.getY(),0));
 
-        this.sprite.translate((unprojectedMouse.x-unprojectedSprite.x)/75,
-                              (unprojectedMouse.y-unprojectedSprite.y)/75);
-
-        camera.position.set(this.sprite.getX(), this.sprite.getY(), 0);
-
-        System.out.println("PROJECTED MOUSE X: " + projectedMouse.x + "; Y: " + projectedMouse.y);
-        System.out.println("PROJECTED SPRITE X: " + projectedSprite.x + "; Y: " + projectedSprite.y);
-        System.out.println("UNPROJECTED MOUSE X: " + unprojectedMouse.x + "; Y: " + unprojectedMouse.y);
-        System.out.println("UNPROJECTED SPRITE X: " + unprojectedSprite.x + "; Y: " + unprojectedSprite.y);
-        System.out.println("SPRITE X: " + this.sprite.getX() + "; Y: " + this.sprite.getY());
-        System.out.println("CAMERA X: " + camera.position.x + "; Y: " + camera.position.y + "\n");
-
-        camera.update();
+        System.out.println(ANSI_WHITE  + "MOUSE X: "              + Gdx.input.getX()    + "; Y: " + Gdx.input.getY()    + ANSI_RESET);
+        System.out.println(ANSI_RED    + "PROJECTED MOUSE X: "    + projectedMouse.x    + "; Y: " + projectedMouse.y    + ANSI_RESET);
+        System.out.println(ANSI_BLUE   + "UNPROJECTED MOUSE X: "  + unprojectedMouse.x  + "; Y: " + unprojectedMouse.y  + ANSI_RESET);
+        System.out.println(ANSI_CYAN   + "PROJECTED SPRITE X: "   + projectedSprite.x   + "; Y: " + projectedSprite.y   + ANSI_RESET);
+        System.out.println(ANSI_GREEN  + "UNPROJECTED SPRITE X: " + unprojectedSprite.x + "; Y: " + unprojectedSprite.y + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "SPRITE X: "             + this.sprite.getX()  + "; Y: " + this.sprite.getY()  + ANSI_RESET);
+        System.out.println(ANSI_YELLOW + "CAMERA X: "             + camera.position.x   + "; Y: " + camera.position.y   + ANSI_RESET + "\n");
     }
 }

@@ -2,9 +2,7 @@ package com.codered.ef.Characters.Olympians;
 
 
 import com.badlogic.gdx.graphics.Texture;
-import com.codered.ef.Characters.AttackType;
 import com.codered.ef.Characters.Character;
-import com.codered.ef.Characters.Type;
 
 public class Gunslinger extends Character {
 
@@ -15,8 +13,6 @@ public class Gunslinger extends Character {
                 2,
                 15,
                 15,
-                Type.DPS,
-                AttackType.RANGED,
                 new Texture("Macheta.png"));
     }
 
@@ -46,13 +42,4 @@ public class Gunslinger extends Character {
 
     }
 
-    @Override
-    public boolean isOnCooldown() {
-        return cooldownCheck;
-    }
-
-    @Override
-    public void setOnCooldown(boolean cooldown) {
-        cooldownCheck = cooldown;
-    }
 }

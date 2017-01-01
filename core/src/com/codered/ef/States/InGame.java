@@ -3,11 +3,15 @@ package com.codered.ef.States;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.codered.ef.Characters.Character;
 import com.codered.ef.Characters.Olympians.Gunslinger;
 
 public class InGame extends State{
     private static Character character = new Gunslinger();
+    private static final Vector2 STARTING_POSITION = new Vector2(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+    private float mouseX = STARTING_POSITION.x,
+            mouseY = STARTING_POSITION.y;
 
     public InGame(GameStateManager gsm) {
         super(gsm);
@@ -15,9 +19,14 @@ public class InGame extends State{
 
     @Override
     public void update() {
-            if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                character.move();
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+          if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+              mouseX = Gdx.input.getX();
+              mouseY = Gdx.input.getY();
+
+          }
+            character.move(mouseX, mouseY);
+
+      /*      } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
                 character.qAbility();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
                 character.wAbility();
@@ -25,7 +34,7 @@ public class InGame extends State{
                 character.eAbility();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
                 character.rAbility();
-            }
+            } */
 
     }
 
